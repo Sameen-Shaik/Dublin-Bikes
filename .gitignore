@@ -180,4 +180,11 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-Data/*.csv
+
+# Ignore raw data files
+data/*.csv
+
+# Ignore generated ML models and predictions
+outputs/models/*.joblib
+outputs/models/*.pkl
+outputs/*.csv
