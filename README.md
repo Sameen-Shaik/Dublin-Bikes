@@ -61,7 +61,15 @@ npm run dev
 UI runs at `http://localhost:5173`.
 
 ## Docker
-*(In Progress)* Containerized orchestration using `docker-compose` for the frontend and backend.
+The entire stack is containerized for reproducible deployments.
+
+To build and run the services simultaneously:
+```bash
+docker-compose up --build
+```
+This spins up:
+- The backend API on `http://localhost:8000`
+- The optimized Nginx frontend on `http://localhost:5173`
 
 ## Project structure
 ```text
