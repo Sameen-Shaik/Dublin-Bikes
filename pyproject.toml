@@ -12,7 +12,24 @@ dependencies = [
     "numpy>=2.5.1",
     "pandas>=3.0.5",
     "pydantic>=2.13.4",
+    "ruff>=0.16.3",
     "scikit-learn>=1.9.0",
     "uvicorn>=0.52.1",
     "xgboost>=3.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.10.0",
+    "pytest>=9.1.1",
+]
+
+
+# pytest configuration
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+filterwarnings = [
+  "ignore:Setting the shape on a NumPy array has been deprecated:DeprecationWarning:joblib"
 ]
