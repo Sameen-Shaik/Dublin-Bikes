@@ -24,7 +24,9 @@ jobs:
                                                                                                         
       - name: Install dependencies                                                                     
         run: uv sync --frozen --no-install-project                                                     
-                                                                                                         
+                                                                                                        
+      - name: Run Ruff Linter                                                                          
+        run: uv run ruff check .                                                                        
                                                                                                         
   build-frontend:                                                                                      
     name: Verify React Build                                                                           
