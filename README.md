@@ -7,7 +7,7 @@ A full-stack machine learning application that predicts the availability of bike
 Urban bike-sharing systems suffer from severe rebalancing issues, where stations become completely empty or entirely full during peak hours. Predicting these states allows for proactive fleet management and improves the user experience by guaranteeing bike availability.
 
 ## Architecture
-An end-to-end ML application featuring modular data processing, an XGBoost model, a REST API inference server, and a reactive frontend UI.
+An end-to-end ML application featuring modular data processing, an XGBoost model, a REST API inference server, and a reactive frontend UI. A Continuous Integration (CI) pipeline enforces code quality and runs automated testing via GitHub Actions.
 
 ## Dataset
 Uses the official Dublin Bikes historical dataset. The current project scope utilizes a one-month slice (November 1st - November 30th, 2021) containing station status, timestamps, and capacity metrics.
@@ -73,11 +73,13 @@ This spins up:
 
 ## Project structure
 ```text
+├── .github/         # CI/CD workflows
 ├── api/             # FastAPI backend service
 ├── frontend/        # React + TypeScript UI
 ├── notebooks/       # EDA and feature prototyping
 ├── outputs/         # Serialized .joblib models
 ├── src/             # Core ML module (features, models)
+├── tests/           # Unit and integration test suites
 ├── main.py          # Training orchestration script
 └── README.md
 ```
