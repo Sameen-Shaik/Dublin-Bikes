@@ -1,6 +1,7 @@
-import pandas as pd
+
 import joblib
-from pathlib import Path
+import pandas as pd
+
 from src.config import MODELS_DIR
 
 MODEL_BUNDLE_PATH = MODELS_DIR / "dublin_bikes_xgboost.joblib"

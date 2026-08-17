@@ -1,6 +1,7 @@
-import numpy as np                                                                                                         
-import pandas as pd                                                                                                        
-                                                                                                                            
+import numpy as np
+import pandas as pd
+
+
 def clean_bikes_data(df_raw: pd.DataFrame) -> pd.DataFrame:                                                                
     """                                                                                                                    
     Standardizes schema, applies business rules, and cleans the raw Dublin Bikes dataframe.                                
