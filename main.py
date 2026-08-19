@@ -31,16 +31,16 @@ def prepare_data():
     ]                                                                                                                      
     categorical_features = ["STATION ID", "STATUS"]                                                                        
     target_column = "TARGET_AVAILABLE_BIKES"                                                                               
-                                                                                                                            
+
     X_train_val = train_val_df[numeric_features + categorical_features]                                                    
     y_train_val = train_val_df[target_column]                                                                              
     X_test = test_df[numeric_features + categorical_features]                                                              
     y_test = test_df[target_column]  
 
-    return X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features
+    return X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df
 
 def train_XGB_regressor():
-    X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features = prepare_data()
+    X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df = prepare_data()
                                                                                       
                                                                                                                             
     print("1. Training Pipeline...")                                                                                       
