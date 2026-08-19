@@ -1,16 +1,19 @@
-                                                                                                                        
-import pandas as pd                                                                                                        
-import numpy as np                                                                                                         
-import joblib                                                                                                              
-from sklearn.compose import ColumnTransformer                                                                              
-from sklearn.impute import SimpleImputer                                                                                   
-from sklearn.metrics import mean_absolute_error, mean_squared_error, median_absolute_error, r2_score                       
-from sklearn.pipeline import Pipeline                                                                                      
-from sklearn.preprocessing import OneHotEncoder                                                                            
-from xgboost import XGBRegressor                                                                                           
-from typing import List, Dict, Any                                                                                         
-                                                                                                                            
-def build_pipeline(numeric_features: List[str], categorical_features: List[str], xgb_params: dict) -> Pipeline:            
+import joblib
+import numpy as np
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    median_absolute_error,
+    r2_score,
+)
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from xgboost import XGBRegressor
+
+
+def build_pipeline(numeric_features: list[str], categorical_features: list[str], xgb_params: dict) -> Pipeline:            
     """                                                                                                                    
     Builds the complete scikit-learn pipeline including imputation, encoding, and the XGBoost model.                       
     """                                                                                                                    

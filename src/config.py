@@ -1,5 +1,5 @@
-from pathlib import Path                                                                                                   
-                                                                                                                               
+from pathlib import Path
+
 # Base Paths                                                                                                               
 ROOT_DIR = Path(__file__).resolve().parent.parent                                                                          
 DATA_DIR = ROOT_DIR / "data"                                                                                               

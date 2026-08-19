@@ -1,0 +1,49 @@
+name: Dublin Bikes CI                                                                                  
+                                                                                                        
+on:                                                                                                    
+  push:                                                                                                
+    branches: [ "main" ]                                                                               
+  pull_request:                                                                                        
+    branches: [ "main" ]                                                                               
+                                                                                                        
+jobs:                                                                                                  
+  test-and-lint:                                                                                       
+    name: Test & Lint Backend                                                                          
+    runs-on: ubuntu-latest                                                                             
+    steps:                                                                                             
+      - name: Checkout code                                                                            
+        uses: actions/checkout@v4                                                                      
+                                                                                                        
+      - name: Install uv                                                                               
+        uses: astral-sh/setup-uv@v3                                                                    
+                                                                                                        
+      - name: Set up Python                                                                            
+        uses: actions/setup-python@v5                                                                  
+        with:                                                                                          
+          python-version: "3.12"                                                                       
+                                                                                                        
+      - name: Install dependencies                                                                     
+        run: uv sync --frozen --no-install-project                                                     
+                                                                                                        
+      - name: Run Ruff Linter                                                                          
+        run: uv run ruff check .                                                                        
+                                                                                                        
+  build-frontend:                                                                                      
+    name: Verify React Build                                                                           
+    runs-on: ubuntu-latest                                                                             
+    steps:                                                                                             
+      - name: Checkout code                                                                            
+        uses: actions/checkout@v4                                                                      
+                                                                                                        
+      - name: Setup Node.js                                                                            
+        uses: actions/setup-node@v4                                                                    
+        with:                                                                                          
+          node-version: "20"                                                                           
+                                                                                                        
+      - name: Install NPM dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run TypeScript & Vite Build
+        working-directory: ./frontend
+        run: npm run build

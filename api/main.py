@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from src.inference import predict_bikes
-from fastapi.middleware.cors import CORSMiddleware
+
 import pandas as pd
-from pathlib import Path
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
 from src.config import DATA_DIR
+from src.inference import predict_bikes
 
 app = FastAPI(title="Dublin Bikes ML API")
 

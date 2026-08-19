@@ -1,14 +1,16 @@
-import numpy as np                                                                                                         
-import pandas as pd                                                                                                        
-from typing import Tuple                                                                                                   
-from src.config import RAW_DATA_PATH                                                                                       
-                                                                                                                            
+
+import numpy as np
+import pandas as pd
+
+from src.config import RAW_DATA_PATH
+
+
 def load_raw_data(filepath: str = RAW_DATA_PATH) -> pd.DataFrame:                                                          
     """Loads the raw Dublin Bikes dataset."""                                                                              
     df = pd.read_csv(filepath)                                                                                             
     return df                                                                                                              
                                                                                                                             
-def chronological_split(df: pd.DataFrame, train_ratio: float = 0.70, val_ratio: float = 0.15) -> Tuple[pd.DataFrame, pd.   
+def chronological_split(df: pd.DataFrame, train_ratio: float = 0.70, val_ratio: float = 0.15) -> tuple[pd.DataFrame, pd.   
 DataFrame, pd.DataFrame]:                                                                                                    
     """                                                                                                                    
     Splits the dataset temporally into train, validation, and test sets.                                                   
