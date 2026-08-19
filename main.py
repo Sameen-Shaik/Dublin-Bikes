@@ -8,7 +8,7 @@ from src.features import clean_bikes_data, engineer_time_series_features
 from src.models import build_pipeline, evaluate_predictions, save_model_bundle
 
 
-def run_pipeline():                                                                                                        
+def prepare_data():
     print("1. Loading Data...")                                                                                            
     raw_df = load_raw_data(RAW_DATA_PATH)                                                                                  
                                                                                                                             
@@ -35,13 +35,19 @@ def run_pipeline():
     X_train_val = train_val_df[numeric_features + categorical_features]                                                    
     y_train_val = train_val_df[target_column]                                                                              
     X_test = test_df[numeric_features + categorical_features]                                                              
-    y_test = test_df[target_column]                                                                                        
+    y_test = test_df[target_column]  
+
+    return X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features
+
+def train_XGB_regressor():
+    X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features = prepare_data()
+                                                                                      
                                                                                                                             
-    print("4. Training Pipeline...")                                                                                       
+    print("1. Training Pipeline...")                                                                                       
     pipeline = build_pipeline(numeric_features, categorical_features, XGB_PARAMS)                                          
     pipeline.fit(X_train_val, y_train_val)                                                                                 
                                                                                                                             
-    print("5. Evaluating on Test Set...")                                                                                  
+    print("2. Evaluating on Test Set...")                                                                                  
     test_pred = pipeline.predict(X_test)                                                                                   
                                                                                                                             
     # Clip predictions to valid bike stands capacity                                                                       
@@ -50,7 +56,7 @@ def run_pipeline():
     metrics = evaluate_predictions("XGBoost", y_test, test_pred)                                                           
     print(f"Test Results: {metrics}")                                                                                      
                                                                                                                             
-    print("6. Saving Model Bundle...")                                                                                     
+    print("3. Saving Model Bundle...")                                                                                     
     MODELS_DIR.mkdir(parents=True, exist_ok=True)                                                                          
     bundle_metadata = {                                                                                                    
         "feature_columns": numeric_features + categorical_features,                                                        
@@ -59,7 +65,12 @@ def run_pipeline():
         "test_metrics": [metrics]                                                                                          
     }
     save_model_bundle(pipeline, bundle_metadata, MODELS_DIR / "dublin_bikes_xgboost.joblib")
+
+def run_pipeline():                                                                                                        
+    prepare_data()
+    train_XGB_regressor()
     print("Pipeline Complete!")
+
 
 if __name__ == "__main__":
     run_pipeline()
