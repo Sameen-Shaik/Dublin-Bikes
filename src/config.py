@@ -22,3 +22,17 @@ XGB_PARAMS = {
     "random_state": 42,
     "n_jobs": -1,
 }                     
+
+#Model Parameters
+LGB_PARAMS = {
+    "n_estimators": 500,
+    "learning_rate": 0.04,
+    "max_depth": 6,
+    "num_leaves": 31,
+    "min_child_weight": 3,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "objective": "regression",
+    "random_state": 42,
+    "n_jobs": -1,
+}                     

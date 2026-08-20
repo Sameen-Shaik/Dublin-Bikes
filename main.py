@@ -1,11 +1,14 @@
                                                                                                                         
 import numpy as np
 import pandas as pd
+from lightgbm import LGBMRegressor
+from sklearn.pipeline import Pipeline
+from xgboost import XGBRegressor
 
-from src.config import MODELS_DIR, RAW_DATA_PATH, XGB_PARAMS
+from src.config import LGB_PARAMS, MODELS_DIR, RAW_DATA_PATH, XGB_PARAMS
 from src.data import chronological_split, load_raw_data
 from src.features import clean_bikes_data, engineer_time_series_features
-from src.models import build_pipeline, evaluate_predictions, save_model_bundle
+from src.models import build_preprocessor, evaluate_predictions, save_model_bundle
 
 
 def prepare_data():
@@ -39,24 +42,28 @@ def prepare_data():
 
     return X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df
 
-def train_XGB_regressor():
-    X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df = prepare_data()
-                                                                                      
-                                                                                                                            
-    print("1. Training Pipeline...")                                                                                       
-    pipeline = build_pipeline(numeric_features, categorical_features, XGB_PARAMS)                                          
-    pipeline.fit(X_train_val, y_train_val)                                                                                 
-                                                                                                                            
-    print("2. Evaluating on Test Set...")                                                                                  
-    test_pred = pipeline.predict(X_test)                                                                                   
+def train_model(*args):
+    #unpacked args inside the function
+    model, params, preprocessor, X_train_preprocessed, y_train_val, X_test_preprocessed, y_test, test_df, numeric_features, categorical_features = args                                                       
+    model_name = model.__name__
+
+    print("===================================")
+    print(f"Training {model_name}")
+    print("===================================")
+
+    model = model(**params)
+    model.fit(X_train_preprocessed, y_train_val)
+
+    print("1. Evaluating on Test Set...")                                                                                  
+    test_pred = model.predict(X_test_preprocessed)                                                                                   
                                                                                                                             
     # Clip predictions to valid bike stands capacity                                                                       
     test_pred = np.clip(test_pred, 0, test_df["BIKE STANDS"].to_numpy())                                                   
                                                                                                                             
-    metrics = evaluate_predictions("XGBoost", y_test, test_pred)                                                           
+    metrics = evaluate_predictions(model_name, y_test, test_pred)                                                           
     print(f"Test Results: {metrics}")                                                                                      
                                                                                                                             
-    print("3. Saving Model Bundle...")                                                                                     
+    print("2. Saving Model Bundle...")                                                                                     
     MODELS_DIR.mkdir(parents=True, exist_ok=True)                                                                          
     bundle_metadata = {                                                                                                    
         "feature_columns": numeric_features + categorical_features,                                                        
@@ -64,12 +71,24 @@ def train_XGB_regressor():
         "categorical_features": categorical_features,                                                                      
         "test_metrics": [metrics]                                                                                          
     }
-    save_model_bundle(pipeline, bundle_metadata, MODELS_DIR / "dublin_bikes_xgboost.joblib")
 
-def run_pipeline():                                                                                                        
-    prepare_data()
-    train_XGB_regressor()
-    print("Pipeline Complete!")
+    final_pipeline = Pipeline([
+        ("preprocessor", preprocessor),
+        ("model", model)
+    ])
+    save_model_bundle(final_pipeline, bundle_metadata, MODELS_DIR / f"dublin_bikes_{model_name.lower()}.joblib")
+
+def run_pipeline():           
+    X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df = prepare_data()
+    preprocessor = build_preprocessor(numeric_features, categorical_features)
+    X_train_preprocessed = preprocessor.fit_transform(X_train_val)
+    X_test_preprocessed = preprocessor.transform(X_test)
+
+    models = {XGBRegressor: XGB_PARAMS,
+            LGBMRegressor: LGB_PARAMS}
+
+    for model, params in models.items():
+        train_model(model, params, preprocessor, X_train_preprocessed, y_train_val, X_test_preprocessed, y_test, test_df, numeric_features, categorical_features)
 
 
 if __name__ == "__main__":

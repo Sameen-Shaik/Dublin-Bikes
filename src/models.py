@@ -10,12 +10,11 @@ from sklearn.metrics import (
 )
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
-from xgboost import XGBRegressor
 
 
-def build_pipeline(numeric_features: list[str], categorical_features: list[str], xgb_params: dict) -> Pipeline:            
+def build_preprocessor(numeric_features: list[str], categorical_features: list[str]) -> Pipeline:            
     """                                                                                                                    
-    Builds the complete scikit-learn pipeline including imputation, encoding, and the XGBoost model.                       
+    Builds the preprocessor for the scikit-learn pipeline including imputation and encoding.                       
     """                                                                                                                    
     numeric_pipeline = Pipeline([                                                                                          
         ("imputer", SimpleImputer(strategy="median")),                                                                     
@@ -30,15 +29,8 @@ def build_pipeline(numeric_features: list[str], categorical_features: list[str],
         ("numeric", numeric_pipeline, numeric_features),                                                                   
         ("categorical", categorical_pipeline, categorical_features),                                                       
     ])                                                                                                                     
-                                                                                                                            
-    model = XGBRegressor(**xgb_params)                                                                                     
-                                                                                                                            
-    pipeline = Pipeline([                                                                                                  
-        ("preprocessor", preprocessor),                                                                                    
-        ("model", model),                                                                                                  
-    ])                                                                                                                     
-                                                                                                                            
-    return pipeline                                                                                                        
+                                                                                                         
+    return preprocessor                                                                                                        
                                                                                                                             
 def evaluate_predictions(name: str, y_true: np.ndarray, y_pred: np.ndarray) -> dict:                                       
     """Calculates standard regression metrics."""                                                                          

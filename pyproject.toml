@@ -8,9 +8,11 @@ dependencies = [
     "fastapi>=0.141.1",
     "joblib>=1.5.3",
     "jupyterlab>=4.6.2",
+    "lightgbm>=4.7.0",
     "matplotlib>=3.11.1",
     "numpy>=2.5.1",
     "pandas>=3.0.5",
+    "pyarrow<19",
     "pydantic>=2.13.4",
     "ruff>=0.16.3",
     "scikit-learn>=1.9.0",
@@ -38,6 +40,7 @@ filterwarnings = [
 target-version = "py312"
 exclude = [
     "notebooks",
+    "*.ipynb"
 ]
 
 [tool.ruff.lint]

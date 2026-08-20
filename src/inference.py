@@ -4,7 +4,7 @@ import pandas as pd
 
 from src.config import MODELS_DIR
 
-MODEL_BUNDLE_PATH = MODELS_DIR / "dublin_bikes_xgboost.joblib"
+MODEL_BUNDLE_PATH = MODELS_DIR / "dublin_bikes_xgbregressor.joblib"
 
 def load_model():
     if not MODEL_BUNDLE_PATH.exists():
