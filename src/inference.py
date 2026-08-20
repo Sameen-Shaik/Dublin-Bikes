@@ -15,16 +15,23 @@ def load_model():
 # "bundle" (or a Model Artifact) is a term used in production MLOps to describe a packaged model with all its dependencies and metadata.
 # It contains the pipeline, feature columns, and metrics.
 
-_bundle = load_model()
-_pipeline = _bundle["pipeline"]
-_feature_cols = _bundle["feature_columns"]
+def _get_model():                                                                                                        
+    """Lazy loader to prevent import-time crashes in CI"""                                                               
+    global _bundle, _pipeline, _feature_cols                                                                             
+    if _pipeline is None:                                                                                                
+        _bundle = load_model()                                                                                           
+        _pipeline = _bundle["pipeline"]                                                                                  
+        _feature_cols = _bundle["feature_columns"]                                                                       
+    return _pipeline, _feature_cols   
 
 def predict_bikes(features: dict) -> float:
     """
     Takes a dictionary of features, converts to a dataframe, and predicts
     """
-    input_df = pd.DataFrame([features], columns=_feature_cols)
-    prediction = _pipeline.predict(input_df)[0]
+    pipeline, feature_cols = _get_model() 
+    
+    input_df = pd.DataFrame([features], columns=feature_cols)
+    prediction = pipeline.predict(input_df)[0]
     return float(max(0.0, prediction))
     
 
