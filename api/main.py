@@ -17,9 +17,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-print("Loading historical data into memory...")                                                                            
-historical_data = pd.read_csv(DATA_DIR / "dataset_forecasting_features.csv")     
-historical_data["TIME"] = pd.to_datetime(historical_data["TIME"])  
+_historical_data = None                                                                                                  
+                                                                                                                            
+def get_historical_data():                                                                                               
+    global _historical_data                                                                                              
+    if _historical_data is None:                                                                                         
+        _historical_data = pd.read_csv(DATA_DIR / "dataset_forecasting_features.csv")                                    
+        _historical_data["TIME"] = pd.to_datetime(_historical_data["TIME"])                                              
+    return _historical_data 
 
 class BikePredictionRequest(BaseModel):
     STATION_ID: int
@@ -34,7 +39,7 @@ def health_check():
 @app.post("/predict")                                                                                                      
 def predict(request: BikePredictionRequest):                                                                               
     target_dt = pd.to_datetime(request.TARGET_TIME)                                                                        
-                                                                                                                            
+    historical_data = get_historical_data()                                                                                                  
     station_data = historical_data[historical_data["STATION ID"] == request.STATION_ID]                                    
                                                                                                                             
     past_data = station_data[station_data["TIME"] <= target_dt]                                                             
