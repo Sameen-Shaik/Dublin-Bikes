@@ -188,3 +188,10 @@ data/*.csv
 outputs/models/*.joblib
 outputs/models/*.pkl
 outputs/*.csv
+
+# Ignore JetBrains
+*.idea
+
+# Ignore mlflow artifacts
+mlruns/*
+mlflow.db

@@ -12,7 +12,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
 
-def build_preprocessor(numeric_features: list[str], categorical_features: list[str]) -> Pipeline:            
+def build_preprocessor(numeric_features: list[str], categorical_features: list[str]) -> ColumnTransformer:
     """                                                                                                                    
     Builds the preprocessor for the scikit-learn pipeline including imputation and encoding.                       
     """                                                                                                                    

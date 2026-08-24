@@ -77,6 +77,7 @@ def train_model(*args):
         ("model", model)
     ])
     save_model_bundle(final_pipeline, bundle_metadata, MODELS_DIR / f"dublin_bikes_{model_name.lower()}.joblib")
+    return final_pipeline
 
 def run_pipeline():           
     X_train_val, y_train_val, X_test, y_test, numeric_features, categorical_features, test_df = prepare_data()
